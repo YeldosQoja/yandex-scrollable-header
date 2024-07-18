@@ -5,6 +5,7 @@ node_modules/
 
 # ios
 ios/
+android/
 
 # Expo
 .expo/

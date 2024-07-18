@@ -1,5 +1,5 @@
-import { RefObject, useState } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { useState } from "react";
+import { StyleSheet } from "react-native";
 import Animated, {
   clamp,
   Extrapolation,
@@ -15,6 +15,7 @@ import Animated, {
 import {
   HEADER_DELTA,
   HEADER_HEIGHT,
+  TAB_PADDING,
   TABS_HEIGHT,
   TOPBAR_HEIGHT,
 } from "@/constants";
@@ -25,9 +26,9 @@ type TabsProps = {
   y: SharedValue<number>;
   tabs: string[];
   offsets: number[];
-  selectedIndex: SharedValue<number>;
   isScrollAnimating: SharedValue<boolean>;
-  scrollView: RefObject<ScrollView>;
+  selectedIndex: SharedValue<number>;
+  onSelect: (index: number) => void;
 };
 
 type Measurement = {
@@ -40,7 +41,7 @@ export const Tabs = ({
   tabs,
   offsets,
   selectedIndex,
-  scrollView,
+  onSelect,
   isScrollAnimating,
 }: TabsProps) => {
   const tabsView = useAnimatedRef<Animated.ScrollView>();
@@ -48,7 +49,7 @@ export const Tabs = ({
     Array(offsets.length).fill({ offset: 0, width: 0 })
   );
 
-  console.log({ measurements });
+  const x = useSharedValue(0);
 
   useDerivedValue(() => {
     if (!isScrollAnimating.value) {
@@ -65,7 +66,6 @@ export const Tabs = ({
     scrollTo(tabsView, measurements[selectedIndex.value].offset, 0, true);
   }, [measurements]);
 
-  const x = useSharedValue(0);
   const maskedViewStyle = useAnimatedStyle(
     () => ({
       width: withTiming(
@@ -83,13 +83,13 @@ export const Tabs = ({
         {
           translateX: withTiming(
             interpolate(
-              x.value - measurements[selectedIndex.value].offset,
+              x.value - measurements[selectedIndex.value].offset - TAB_PADDING,
               [0, 100],
               [0, -100],
               Extrapolation.EXTEND
             ),
             {
-              duration: 100,
+              duration: 50,
             }
           ),
         },
@@ -121,19 +121,11 @@ export const Tabs = ({
     };
   });
 
-  const handleSelect = (index: number) => {
-    selectedIndex.value = index;
-    if (scrollView.current) {
-      isScrollAnimating.value = true;
-      scrollView.current.scrollTo({ y: offsets[index] });
-    }
-  };
-
   const handleMeasure = (index: number, { offset, width }: Measurement) => {
     setMeasurements(
       measurements.map((m, i) => {
         if (i === index) {
-          return { offset, width };
+          return { offset: offset - TAB_PADDING, width };
         }
         return m;
       })
@@ -164,7 +156,7 @@ export const Tabs = ({
               key={index}
               title={title}
               active={active}
-              onSelect={() => void handleSelect(index)}
+              onSelect={() => void onSelect(index)}
               onMeasure={(offset, width) =>
                 void handleMeasure(index, { offset, width })
               }
@@ -186,7 +178,7 @@ const styles = StyleSheet.create({
   },
   maskedView: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "#42413E",
+    backgroundColor: Colors.gray,
     borderRadius: 16,
     top: 16,
     bottom: 16,

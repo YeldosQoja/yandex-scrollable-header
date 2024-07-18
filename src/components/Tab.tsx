@@ -1,5 +1,6 @@
 import { Colors } from "@/Colors";
-import { Pressable, Text } from "react-native";
+import { TAB_PADDING } from "@/constants";
+import { Pressable } from "react-native";
 import Animated, {
   SharedValue,
   useAnimatedStyle,
@@ -15,13 +16,13 @@ type TabProps = {
 
 export const Tab = ({ title, active, onSelect, onMeasure }: TabProps) => {
   const textStyle = useAnimatedStyle(() => ({
-    color: withTiming(active.value ? Colors.white : "#42413E"),
+    color: withTiming(active.value ? Colors.white : Colors.gray),
   }));
   return (
     <Pressable
       style={{
         paddingHorizontal: 12,
-        borderRadius: 16,
+        marginLeft: TAB_PADDING,
       }}
       onPress={onSelect}
       onLayout={({

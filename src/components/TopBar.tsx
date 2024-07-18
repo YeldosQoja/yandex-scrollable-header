@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Iconicons from "@expo/vector-icons/Ionicons";
 import { Colors } from "@/Colors";
 import Contants from "expo-constants";
@@ -31,7 +31,7 @@ export const TopBar = ({ y }: TopBarProps) => {
   }));
 
   const iconStyle = useAnimatedStyle(() => ({
-    backgroundColor: y.value < HEADER_DELTA ? "#42413E" : Colors.black,
+    backgroundColor: y.value <= HEADER_DELTA ? Colors.gray : Colors.black,
   }));
 
   const backIconStyle = useAnimatedStyle(() => ({
@@ -73,7 +73,7 @@ export const TopBar = ({ y }: TopBarProps) => {
       <Animated.View style={[styles.icon, iconStyle, backIconStyle]}>
         <Iconicons
           size={22}
-          color="white"
+          color={Colors.white}
           name="arrow-back-outline"
         />
       </Animated.View>
@@ -83,14 +83,14 @@ export const TopBar = ({ y }: TopBarProps) => {
       <Animated.View style={[styles.icon, iconStyle, favoriteIconStyle]}>
         <Iconicons
           size={22}
-          color="white"
+          color={Colors.white}
           name="heart-outline"
         />
       </Animated.View>
       <Animated.View style={[styles.icon, iconStyle, searchIconStyle]}>
         <Iconicons
           size={22}
-          color="white"
+          color={Colors.white}
           name="search-outline"
         />
       </Animated.View>
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1,
-    color: "white",
+    color: Colors.white,
     fontSize: 15,
     fontWeight: "500",
     textAlign: "center",

@@ -234,3 +234,13 @@ export const menu: Menu = [
     ],
   },
 ];
+
+const headerImage = require("../assets/cover.jpg");
+
+export const images = [
+  headerImage,
+  ...menu
+    .map((food) => food.items)
+    .flat()
+    .map(({ image }) => image),
+];
