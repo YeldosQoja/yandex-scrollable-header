@@ -1,6 +1,6 @@
-import { Food } from "./Food";
+import { Menu } from "./Food";
 
-export const foods: { title: string; items: Food[] }[] = [
+export const menu: Menu = [
   {
     title: "Offers",
     items: [
@@ -190,6 +190,46 @@ export const foods: { title: string; items: Food[] }[] = [
         price: 450,
         calories: 1,
         image: require("../assets/drink-4.png"),
+      },
+    ],
+  },
+  {
+    title: "Соусы",
+    items: [
+      {
+        name: "Сырный соус Heinz",
+        price: 150,
+        calories: 1,
+        image: require("../assets/sauce-1.jpeg"),
+      },
+      {
+        name: "Соус барбекю Heinz",
+        price: 150,
+        calories: 1,
+        image: require("../assets/sauce-2.jpeg"),
+      },
+      {
+        name: "Кетчуп Heinz",
+        price: 150,
+        calories: 1,
+        image: require("../assets/sauce-3.jpeg"),
+      },
+    ],
+  },
+  {
+    title: "Прочее",
+    items: [
+      {
+        name: "Пакет",
+        price: 70,
+        calories: 1,
+        image: require("../assets/other-1.jpeg"),
+      },
+      {
+        name: "Влажная салфетка",
+        price: 50,
+        calories: 1,
+        image: require("../assets/other-2.jpeg"),
       },
     ],
   },

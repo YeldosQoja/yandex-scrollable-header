@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingTop: Contants.statusBarHeight,
-    height: Contants.statusBarHeight + TOPBAR_HEIGHT,
+    height: TOPBAR_HEIGHT,
   },
   title: {
     flex: 1,

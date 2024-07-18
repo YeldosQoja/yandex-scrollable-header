@@ -5,3 +5,8 @@ export interface Food {
   calories: number;
   image: any;
 }
+
+export type Menu = Array<{
+  title: string;
+  items: Food[];
+}>;

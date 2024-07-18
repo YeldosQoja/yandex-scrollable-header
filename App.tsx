@@ -1,23 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Asset } from "expo-asset";
-import { TopBar, Header, Menu } from "@/components";
-import { Colors } from "@/Colors";
-import { foods } from "@/foods";
+import { StatusBar } from "expo-status-bar";
 import { useSharedValue } from "react-native-reanimated";
+import { TopBar, Header, Menu, Tabs } from "@/components";
+import { Colors } from "@/Colors";
+import { menu } from "@/foods";
 
 const image = require("./assets/cover.jpg");
 
 export default function App() {
   const [ready, setReady] = useState(false);
+  const scrollView = useRef<ScrollView>(null);
+  const [offsets, setOffsets] = useState<number[]>(Array(menu.length).fill(0));
+
   const y = useSharedValue(0);
+  const selectedIndex = useSharedValue(0);
+  const isScrollAnimating = useSharedValue(false);
 
   useEffect(() => {
     (async () => {
       await Asset.loadAsync([
         image,
-        ...foods
+        ...menu
           .map((food) => food.items)
           .flat()
           .map(({ image }) => image),
@@ -25,6 +30,17 @@ export default function App() {
       setReady(true);
     })();
   }, []);
+
+  const handleMeasure = (index: number, offset: number) => {
+    setOffsets(
+      offsets.map((o, i) => {
+        if (index === i) {
+          return offset;
+        }
+        return o;
+      })
+    );
+  };
 
   if (!ready) {
     return null;
@@ -34,8 +50,39 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar style="light" />
       <Header {...{ y, image }} />
-      <Menu {...{ y }}/>
-      <TopBar {...{ y }}/>
+      <ScrollView
+        ref={scrollView}
+        onScroll={({
+          nativeEvent: {
+            contentOffset: { y: value },
+          },
+        }) => {
+          y.value = value;
+        }}
+        onMomentumScrollEnd={() => {
+          console.log("onScrollAnimationEnd");
+          isScrollAnimating.value = false;
+        }}
+        scrollEventThrottle={1}
+        showsVerticalScrollIndicator={false}
+        style={StyleSheet.absoluteFill}>
+        <Menu
+          y={y}
+          onMeasure={handleMeasure}
+          menu={menu}
+        />
+      </ScrollView>
+      <Tabs
+        {...{
+          y,
+          selectedIndex,
+          offsets,
+          scrollView,
+          isScrollAnimating,
+          tabs: menu.map(({ title }) => title),
+        }}
+      />
+      <TopBar y={y} />
     </View>
   );
 }
