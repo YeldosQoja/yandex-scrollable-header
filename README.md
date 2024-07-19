@@ -66,5 +66,5 @@ Contributions are welcome! Please fork the repository and open a pull request wi
 
 For any questions or feedback, feel free to reach out:
 
-- GitHub: [yourusername](https://github.com/yourusername)
+- GitHub: [YeldosQoja](https://github.com/yourusername)
 - Email: yeldos.kozha@gmail.com
