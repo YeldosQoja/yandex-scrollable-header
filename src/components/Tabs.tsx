@@ -55,7 +55,10 @@ export const Tabs = ({
     if (!isScrollAnimating.value) {
       const scrollY = clamp(y.value, offsets[0], offsets[offsets.length - 1]);
       for (let i = 0; i < offsets.length; i++) {
-        if (offsets[i] - 64 <= scrollY && scrollY < offsets[i + 1] - 64) {
+        if (
+          offsets[i] - 64 <= scrollY &&
+          (i + 1 === offsets.length || scrollY < offsets[i + 1] - 64)
+        ) {
           selectedIndex.value = i;
         }
       }
@@ -68,16 +71,11 @@ export const Tabs = ({
 
   const maskedViewStyle = useAnimatedStyle(
     () => ({
-      width: withTiming(
-        interpolate(
-          selectedIndex.value,
-          tabs.map((_, i) => i),
-          measurements.map(({ width }) => width),
-          Extrapolation.CLAMP
-        ),
-        {
-          duration: 300,
-        }
+      width: interpolate(
+        selectedIndex.value,
+        tabs.map((_, i) => i),
+        measurements.map(({ width }) => width),
+        Extrapolation.CLAMP
       ),
       transform: [
         {
